@@ -4,9 +4,165 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExamTime"
+        xmlns:tk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="ExamTime" Height="450" Width="800"
+        Loaded="Window_Loaded"
+        >
 
-    </Grid>
+    <Viewbox Stretch="Uniform">
+        
+        <DockPanel>
+
+            <DockPanel DockPanel.Dock="Left" Margin="5">
+
+                <DockPanel.Resources>
+
+                    <Style TargetType="GroupBox">
+                        <Setter Property="Margin" Value="5"/>
+                        <Setter Property="Padding" Value="5"/>
+                    </Style>
+
+                    <Style TargetType="RadioButton">
+                        <Setter Property="Margin" Value="0,2"/>
+                    </Style>
+
+                    <Style TargetType="tk:TimeSpanUpDown">
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="ShowDays" Value="False"/>
+                        <Setter Property="ShowSeconds" Value="False"/>
+                        <Setter Property="CurrentDateTimePart" Value="Minute"/>
+                        <Setter Property="Minimum" Value="0"/>
+                        <Setter Property="Step" Value="5"/>
+                    </Style>
+
+                    <Style TargetType="tk:TimePicker">
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="CurrentDateTimePart" Value="Minute"/>
+                        <Setter Property="Step" Value="15"/>
+                        <Setter Property="TimeInterval" Value="00:15"/>
+                    </Style>
+
+                </DockPanel.Resources>
+
+                <GroupBox DockPanel.Dock="Top" Header="Perusal">
+
+                    <ComboBox IsEditable="True" Text="{Binding PerusalName}">
+                        <ComboBoxItem Content=""/>
+                        <ComboBoxItem Content="Perusal" IsSelected="True"/>
+                        <ComboBoxItem Content="Planning"/>
+                    </ComboBox>
+
+                </GroupBox>
+
+                <GroupBox DockPanel.Dock="Top" Header="Duration">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" TextAlignment="Right"
+                                   VerticalAlignment="Center"
+                                       Visibility="{Binding HavePerusal,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                   Text="{Binding PerusalName}"/>
+                        <tk:TimeSpanUpDown Grid.Row="0" Grid.Column="2"
+                                          IsEnabled="{Binding HavePerusal}"
+                                       Visibility="{Binding HavePerusal,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                          Value="{Binding PerusalTime}" />
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" TextAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   Text="Exam"/>
+                        <tk:TimeSpanUpDown Grid.Row="1" Grid.Column="2"
+                                          Value="{Binding ExamTime}" />
+
+                    </Grid>
+
+                </GroupBox>
+
+                <GroupBox DockPanel.Dock="Top" Header="Schedule">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" TextAlignment="Right"
+                                       Visibility="{Binding HavePerusal,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                   VerticalAlignment="Center">
+                            <Run Text="{Binding PerusalName}"/>
+                            <Run Text="starts"/>
+                        </TextBlock>
+                        <tk:TimePicker Grid.Row="0" Grid.Column="2"
+                                          IsEnabled="{Binding HavePerusal}"
+                                       Visibility="{Binding HavePerusal,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                          Value="{Binding PerusalStart}" />
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" TextAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   Text="Exam starts"/>
+                        <tk:TimePicker Grid.Row="1" Grid.Column="2"
+                                       IsReadOnly="{Binding HavePerusal}"
+                                          Value="{Binding ExamStart}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" TextAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   Text="Finish time"/>
+                        <tk:TimePicker Grid.Row="2" Grid.Column="2"
+                                       IsReadOnly="True"
+                                          Value="{Binding FinishTime}" />
+
+                    </Grid>
+
+                </GroupBox>
+
+                <Rectangle/>
+
+            </DockPanel>
+
+            <Grid Background="{Binding CurrentColour}" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" FontSize="36" TextAlignment="Center"
+                                Text="{Binding CurrentName}"
+                           Margin="20,10"
+                           />
+
+                <TextBlock Grid.Row="1" FontSize="150" TextAlignment="Center"
+                                Text="{Binding TimeRemaining}"
+                           Margin="20"
+                           />
+
+                <TextBlock Grid.Row="2" TextAlignment="Center"
+                           Margin="20,10">
+                    <Run Text="Current time:"/>
+                    <Run FontSize="24" Text="{Binding TimeNow,Mode=OneWay}"/>
+                </TextBlock>
+
+            </Grid>
+
+        </DockPanel>
+
+    </Viewbox>
+
 </Window>
